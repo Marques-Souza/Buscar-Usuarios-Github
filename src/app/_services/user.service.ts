@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { UserGit } from '../models/userGit';
+import { catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +14,16 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
   
-  userGitget(username: string){
-   return this.http.get<UserGit>(this.urlBase + 'users/'+ username).pipe(
-      map((response: UserGit) => {
-        return response;
-      })
-    )
-  }
-
+  userGitget(username: string) {
+    return this.http.get<UserGit>(this.urlBase + 'users/' + username).pipe(
+        map((response: UserGit) => {
+            return response;
+        }),
+        catchError((error) => {
+            // Lida com erros específicos
+            console.error('Erro na requisição:', error);
+            return throwError(() => new Error(error.message || 'Erro ao buscar usuário'));
+        })
+    );
+}
 }
