@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { map } from 'rxjs';
 import { UserGit } from '../models/userGit';
 import { catchError, throwError } from 'rxjs';
 
@@ -20,7 +20,7 @@ export class UserService {
             return response;
         }),
         catchError((error) => {
-            // Lida com erros específicos
+
             console.error('Erro na requisição:', error);
             return throwError(() => new Error(error.message || 'Erro ao buscar usuário'));
         })
