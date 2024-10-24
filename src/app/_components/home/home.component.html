@@ -1,0 +1,32 @@
+<h2>Pesquisa de Usúarios GitHub</h2>
+<div class="input-button-group">
+    <input type="text" placeholder="Digite o Usuario" class="input-field" [(ngModel)]="username">
+    <button class="submit-btn" (click)="userGitget()" name="username">Pesquisar</button>
+</div>
+
+
+
+<div *ngIf="user" class="container">
+    <div class="card">
+        <img [src]="user.avatar_url" alt="Logo" class="logo">
+        <h5>{{user.name}}</h5>
+        <p class="name">{{"@" + user.login}}</p>
+        <a [href]="user.html_url">Visitar Perfil</a>
+
+
+        <div class="footer">
+            <div class="footer-selecion">
+                <p>Seguidores:</p>
+                <p> {{user.followers}}</p>
+            </div>
+
+            <div class="footer-selecion">
+                <p>Seguindo:</p>
+                <p>{{user.following}}</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
