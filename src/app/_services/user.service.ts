@@ -14,16 +14,16 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
   
-  userGitget(username: string) {
-    return this.http.get<UserGit>(this.urlBase + 'users/' + username).pipe(
+  userGitget(username: string): Observable<UserGit> {
+    const timestamp = new Date().getTime(); // Adiciona um timestamp para evitar cache
+    return this.http.get<UserGit>(`${this.urlBase}users/${username}?_=${timestamp}`).pipe(
         map((response: UserGit) => {
             return response;
         }),
         catchError((error) => {
-            // Lida com erros específicos
             console.error('Erro na requisição:', error);
             return throwError(() => new Error(error.message || 'Erro ao buscar usuário'));
         })
     );
-}
+  }
 }
