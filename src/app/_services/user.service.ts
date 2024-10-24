@@ -3,8 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { UserGit } from '../models/userGit';
-
-import { ChangeDetectorRef } from '@angular/core';
+import { catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,17 +12,18 @@ export class UserService {
 
   urlBase: string = environment.urlApi;
 
-  constructor(private userServices: UserService, private toastr: ToastrService, private cd: ChangeDetectorRef) {}
-
-  userGitget() {
-      this.user = undefined; // Limpa o usuário antes de fazer a nova requisição
-      this.userServices.userGitget(this.username).subscribe(
-          (response: UserGit) => {
-              this.user = response;
-              this.cd.detectChanges(); // Força a atualização da interface
-          },
-          (error) => {
-              this.toastr.error(error.error.message);
-          }
-      );
-  }
+  constructor(private http: HttpClient) { }
+  
+  userGitget(username: string) {
+    return this.http.get<UserGit>(this.urlBase + 'users/' + username).pipe(
+        map((response: UserGit) => {
+            return response;
+        }),
+        catchError((error) => {
+            // Lida com erros específicos
+            console.error('Erro na requisição:', error);
+            return throwError(() => new Error(error.message || 'Erro ao buscar usuário'));
+        })
+    );
+}
+}
